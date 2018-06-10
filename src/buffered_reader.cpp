@@ -26,7 +26,6 @@ void buffered_reader::reset_ptr() {
 size_t buffered_reader::read(char* buffer, size_t buffer_size) {
     size_t gcount = std::min(buffer_size, unread_bytes);
     in.read(buffer, gcount);
-    check();
     unread_bytes -= gcount;
     return gcount;
 }

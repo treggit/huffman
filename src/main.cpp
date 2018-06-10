@@ -10,11 +10,12 @@ void usage_example() {
 }
 
 int main(int argc, char* argv[]) {
-    if ((argc == 2 && argv[1] == "--help") || (argc != 4)) {
+    string param = argv[1];
+
+    if ((argc == 2 && param == "--help") || (argc != 4)) {
         usage_example();
         return 0;
     }
-    string param = argv[1];
     try {
         string filename = argv[2];
         string output = argv[3];

@@ -15,7 +15,7 @@ frequency::frequency(char const* seq, size_t len) {
 
 void frequency::update_frequency(char const* seq, size_t len) {
     for (size_t i = 0; i < len; i++) {
-        counter[seq[i]]++;
+        counter[static_cast<unsigned char>(seq[i])]++;
     }
 }
 
