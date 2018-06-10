@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.9)
+project(huffman_lib)
+
+set(CMAKE_CXX_STANDARD 14)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -funsigned-char")
+
+add_library(huffman_lib include/huffman_tree.h huffman_tree.cpp include/huffman_encoder.h huffman_encoder.cpp include/huffman_decoder.h huffman_decoder.cpp include/huffman_code.h include/packager.h)
