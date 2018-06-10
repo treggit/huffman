@@ -6,9 +6,10 @@
 #define HUFFMAN_LIB_HUFFMAN_DECODER_H
 
 #include "huffman_tree.h"
+#include "frequency.h"
 
 struct huffman_decoder {
-    void init(huffman_tree::encoded_tree const& encoded);
+    huffman_decoder(huffman_tree::encoded_tree const& encoded);
     void reset_automata();
     void read_bit(bool dir);
     bool matches_any() const;
@@ -19,7 +20,7 @@ struct huffman_decoder {
 
 private:
     huffman_tree tree;
-    huffman_tree::node_ptr automata_ptr;
+    huffman_tree::node* automata_ptr;
     size_t bytes_expected;
 };
 

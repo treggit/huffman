@@ -8,8 +8,6 @@
 #include <cstdio>
 #include <cstdint>
 
-const size_t BIT_CAP = 8;
-
 struct huffman_code {
     uint64_t value;
     size_t length;

@@ -9,6 +9,7 @@
 #include <vector>
 #include "huffman_code.h"
 #include "huffman_decoder.h"
+#include "huffman_consts.h"
 
 template <typename T>
 void complement(T& unpacked, size_t& unpacked_bits, huffman_code& code) {
@@ -23,25 +24,6 @@ void beat_add(T val, std::vector<char>& res) {
     for (size_t i = sizeof(val); i-- > 0;) {
         res.push_back(static_cast<char>((val >> (BIT_CAP * i))));
     }
-}
-
-template <typename T>
-std::vector<char> pack(T& unpacked, size_t& unpacked_bits, std::vector<huffman_code>& encoded_seq, bool is_last_block = true) {
-    size_t process_ptr = 0;
-    std::vector<char> res;
-    while (process_ptr != encoded_seq.size()) {
-        complement(unpacked, unpacked_bits, encoded_seq[process_ptr]);
-        if (unpacked_bits == 0) {
-            beat_add(unpacked, res);
-            unpacked_bits = BIT_CAP * sizeof(unpacked);
-            unpacked = 0;
-        }
-        process_ptr += (encoded_seq[process_ptr].length == 0);
-    }
-    if (is_last_block && unpacked_bits != BIT_CAP * sizeof(unpacked)) {
-        beat_add(unpacked, res);
-    }
-    return res;
 }
 
 template <typename T>

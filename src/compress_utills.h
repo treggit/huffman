@@ -15,7 +15,7 @@
 const size_t BUFFER_SIZE = 4096 * 100;
 
 void encode(std::string const& filename, std::string const& filename_encoded);
-void precalc_frequency(buffered_reader& reader, huffman_encoder& encoder);
+void precalc_frequency(frequency& frec, buffered_reader& reader);
 
 void put_service(buffered_writer& writer, huffman_encoder& encoder);
 

@@ -3,37 +3,37 @@
 //
 
 #include "include/huffman_encoder.h"
-#include <iostream>
+#include "include/packager.h"
 
-huffman_encoder::huffman_encoder() {
-    for (size_t i = 0; i < huffman_tree::ALPHABET_SIZE; i++) {
-        frequency[i] = 0;
-    }
-}
-
-void huffman_encoder::init() {
+huffman_encoder::huffman_encoder(frequency& count) {
     std::vector<std::pair<char, int64_t>> chars;
     for (size_t i = 0; i < huffman_tree::ALPHABET_SIZE; i++) {
-        if (frequency[i]) {
-            chars.push_back({i, frequency[i]});
+        if (count.counter[i]) {
+            chars.push_back({i, count.counter[i]});
         }
     }
     tree.build(chars);
+    unpacked = 0;
+    unpacked_bits = UNPACKED_BITS_INITIAL;
 }
 
-std::vector<huffman_code> huffman_encoder::encode(char const* chars, size_t len) {
-    std::vector<huffman_code> encoded_seq;
-    encoded_seq.reserve(len);
+std::vector<char> huffman_encoder::encode(char const* chars, size_t len, bool is_last) {
+    std::vector<char> res;
     for (size_t i = 0; i < len; i++) {
-        encoded_seq.emplace_back(match(chars[i]));
+        huffman_code code = match(chars[i]);
+        while (code.length) {
+            complement(unpacked, unpacked_bits, code);
+            if (unpacked_bits == 0) {
+                res.push_back(unpacked);
+                unpacked_bits = UNPACKED_BITS_INITIAL;
+                unpacked = 0;
+            }
+        }
     }
-    return encoded_seq;
-}
-
-void huffman_encoder::update_frequency(char const* chars, size_t len) {
-    for (size_t i = 0; i < len; i++) {
-        ++frequency[chars[i]];
+    if (is_last && unpacked_bits != UNPACKED_BITS_INITIAL) {
+        res.push_back(unpacked);
     }
+    return res;
 }
 
 huffman_tree::encoded_tree huffman_encoder::get_service() {

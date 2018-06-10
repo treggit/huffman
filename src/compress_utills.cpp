@@ -8,36 +8,29 @@
 
 
 void encode(std::string const& filename, std::string const& filename_encoded) {
-    std::cout << "Starting encoding " << filename << "...\n";
-    huffman_encoder encoder;
     buffered_reader reader(filename);
-    precalc_frequency(reader, encoder);
-    reader.reset_unread_bytes();
+    frequency freq;
+    precalc_frequency(freq, reader);
+    reader.reset();
 
-    encoder.init();
-    std::cout << "Tree was built\n";
+    huffman_encoder encoder(freq);
 
     buffered_writer writer(filename_encoded, true);
     put_service(writer, encoder);
-    char unpacked = 0;
-    size_t unpacked_bits = BIT_CAP * sizeof(unpacked);
     char buffer[BUFFER_SIZE];
-
-    std::cout << "Reading from " << filename << "\n";
     while (reader.can_read()) {
         size_t len = reader.read(buffer, BUFFER_SIZE);
-        std::vector<huffman_code> encoded_seq = encoder.encode(buffer, len);
-        std::vector<char> packed = pack(unpacked, unpacked_bits, encoded_seq, !reader.can_read());
+        std::vector<char> packed = encoder.encode(buffer, len, !reader.can_read());
         writer.write(packed.data(), packed.size());
     }
     std::cout << "File " << filename << " encoded successfully, saved to " << filename_encoded << "\n";
 }
 
-void precalc_frequency(buffered_reader& reader, huffman_encoder& encoder) {
+void precalc_frequency(frequency& freq, buffered_reader& reader) {
     char buffer[BUFFER_SIZE];
     while (reader.can_read()) {
         size_t len = reader.read(buffer, BUFFER_SIZE);
-        encoder.update_frequency(buffer, len);
+        freq.update_frequency(buffer, len);
     }
 }
 
@@ -51,15 +44,11 @@ void put_service(buffered_writer& writer, huffman_encoder& encoder) {
 }
 
 void decode(std::string const& filename, std::string const& filename_decoded) {
-    std::cout << "Starting decoding " << filename << "...\n";
-    huffman_decoder decoder;
     buffered_reader reader(filename);
-    decoder.init(extract_service(reader));
-    std::cout << "Tree regenerated\n";
+    huffman_decoder decoder(extract_service(reader));
     buffered_writer writer(filename_decoded, true);
 
     char buffer[BUFFER_SIZE];
-    std::cout << "Reading from " << filename << "\n";
     size_t bytes_decoded = 0;
     while (reader.can_read() && bytes_decoded < decoder.get_bytes_expected()) {
         size_t len = reader.read(buffer, BUFFER_SIZE);

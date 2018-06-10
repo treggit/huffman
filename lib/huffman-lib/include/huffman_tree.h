@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include "huffman_code.h"
+#include "huffman_consts.h"
 
 struct huffman_tree {
 
@@ -22,7 +23,7 @@ struct huffman_tree {
         char value;
         node_ptr left, right;
         size_t depth;
-        std::vector<std::vector<node_ptr>> jump;
+        std::vector<std::vector<node*>> jump;
 
 
         explicit node(char val, size_t d = 0)
@@ -35,8 +36,8 @@ struct huffman_tree {
             return (left == nullptr);
         }
 
-        node_ptr calc_jump(node_ptr& child, size_t prefix, size_t size) {
-            node_ptr next_node = child->jump[prefix][size - 1];
+        node* calc_jump(node* child, size_t prefix, size_t size) {
+            node* next_node = child->jump[prefix][size - 1];
             if (next_node == nullptr) {
                 next_node = child;
             }
@@ -58,10 +59,10 @@ struct huffman_tree {
             for (size_t size = 1; size <= BIT_CAP; size++) {
                 for (size_t prefix = 0; prefix < ALPHABET_SIZE; prefix++) {
                     if ((prefix & (1 << (size - 1))) > 0) {
-                        jump[prefix][size] = calc_jump(right, prefix, size);
+                        jump[prefix][size] = calc_jump(right.get(), prefix, size);
                     }
                     else {
-                        jump[prefix][size] = calc_jump(left, prefix, size);
+                        jump[prefix][size] = calc_jump(left.get(), prefix, size);
                     }
                 }
             }

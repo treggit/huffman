@@ -12,32 +12,19 @@
 
 using namespace std;
 
-string build_string(char* ptr, size_t len) {
-    string res;
-    if (ptr == nullptr) {
-        return res;
-    }
-    for (char* ch = ptr; ch != ptr + len; ch++) {
-        res.push_back(*ch);
-    }
-    return res;
-}
-
 string encode_decode(string const& text) {
-    huffman_encoder encoder;
-    huffman_decoder decoder;
-    encoder.update_frequency(text.data(), text.length());
-    encoder.init();
-    decoder.init(encoder.get_service());
+    frequency freq(text.data(), text.size());
+    huffman_encoder encoder(freq);
+    huffman_decoder decoder(encoder.get_service());
 
-    char unpacked = 0;
-    size_t unpacked_bits = BIT_CAP;
-
-    vector<huffman_code> encoded_seq = encoder.encode(text.data(), text.size());
-    vector<char> packed = pack(unpacked, unpacked_bits, encoded_seq);
+    vector<char> packed = encoder.encode(text.data(), text.size());
 
     vector<char> decoded_seq = unpack(packed.data(), packed.size(), text.size(), decoder);
-    return build_string(decoded_seq.data(), decoded_seq.size());
+    if (decoded_seq.size() == 0) {
+        return "";
+    }
+    string res(decoded_seq.data(), decoded_seq.size());
+    return res;
 }
 
 

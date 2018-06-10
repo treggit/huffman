@@ -6,19 +6,22 @@
 #define HUFFMAN_LIB_HUFFMAN_CODE_H
 
 #include "huffman_tree.h"
+#include "frequency.h"
 
 struct huffman_encoder {
 
-    huffman_encoder();
-    void init();
-    std::vector<huffman_code> encode(char const* chars, size_t len);
-    void update_frequency(char const* chars, size_t len);
+    explicit huffman_encoder(frequency& count);
+    std::vector<char> encode(char const* chars, size_t len, bool is_last = true);
     huffman_tree::encoded_tree get_service();
     huffman_code match(char ch);
 
 private:
     huffman_tree tree;
-    int64_t frequency[huffman_tree::ALPHABET_SIZE];
+
+    char unpacked;
+    size_t unpacked_bits;
+
+    const size_t UNPACKED_BITS_INITIAL = sizeof(unpacked) * BIT_CAP;
 };
 
 #endif //HUFFMAN_LIB_HUFFMAN_CODE_H

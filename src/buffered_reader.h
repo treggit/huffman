@@ -16,7 +16,7 @@ struct buffered_reader {
     bool can_read();
     char get_char();
     void check();
-    void reset_unread_bytes();
+    void reset();
 
     template <typename T>
     void get(T& ch) {

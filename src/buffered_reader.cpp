@@ -12,7 +12,7 @@ buffered_reader::buffered_reader(std::string const& filename) {
         throw std::runtime_error("Couldn't open file: " + filename);
     }
     //in.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-    reset_unread_bytes();
+    reset();
 }
 
 buffered_reader::~buffered_reader() {
@@ -49,7 +49,7 @@ void buffered_reader::check() {
     }
 }
 
-void buffered_reader::reset_unread_bytes() {
+void buffered_reader::reset() {
     in.seekg(0, std::ifstream::end);
     unread_bytes = in.tellg();
     reset_ptr();
