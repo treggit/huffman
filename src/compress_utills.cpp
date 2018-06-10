@@ -19,7 +19,7 @@ void encode(std::string const& filename, std::string const& filename_encoded) {
 
     buffered_writer writer(filename_encoded, true);
     put_service(writer, encoder);
-    uint32_t unpacked = 0;
+    char unpacked = 0;
     size_t unpacked_bits = BIT_CAP * sizeof(unpacked);
     char buffer[BUFFER_SIZE];
 

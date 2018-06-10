@@ -26,13 +26,8 @@ void buffered_reader::reset_ptr() {
 size_t buffered_reader::read(char* buffer, size_t buffer_size) {
     size_t gcount = std::min(buffer_size, unread_bytes);
     in.read(buffer, gcount);
-    if (!check()) {
-        throw std::runtime_error("Couldn't read file");
-    }
+    check();
     unread_bytes -= gcount;
-    if (!check()) {
-        throw std::runtime_error("Couldn't write file");
-    }
     return gcount;
 }
 
@@ -43,15 +38,15 @@ bool buffered_reader::can_read() {
 char buffered_reader::get_char() {
     char c;
     in.get(c);
-    if (!check()) {
-        throw std::runtime_error("Couldnt read file");
-    }
+    check();
     unread_bytes--;
     return c;
 }
 
-bool buffered_reader::check() {
-    return !in.fail();
+void buffered_reader::check() {
+    if (in.fail()) {
+        throw std::runtime_error("Couldn't read file");
+    }
 }
 
 void buffered_reader::reset_unread_bytes() {

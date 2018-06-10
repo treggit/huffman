@@ -23,18 +23,16 @@ buffered_writer::~buffered_writer() {
 
 void buffered_writer::write(char* buffer, size_t len) {
     out.write(buffer, len);
-    if (!check()) {
-        throw std::runtime_error("Couldn't write file");
-    }
+    check();
 }
 
 void buffered_writer::put_char(char ch) {
     out.put(ch);
-    if (!check()) {
-        throw std::runtime_error("Couldn't write file");
-    }
+    check();
 }
 
-bool buffered_writer::check() {
-    return !out.fail();
+void buffered_writer::check() {
+    if (out.fail()) {
+        throw std::runtime_error("Couldn't write file");
+    }
 }

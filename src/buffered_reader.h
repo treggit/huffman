@@ -15,7 +15,7 @@ struct buffered_reader {
     size_t read(char* buffer, size_t buffer_size);
     bool can_read();
     char get_char();
-    bool check();
+    void check();
     void reset_unread_bytes();
 
     template <typename T>
@@ -25,9 +25,7 @@ struct buffered_reader {
             T c = get_char();
             ch |= (c << (8 * i));
         }
-        if (!check()) {
-            throw std::runtime_error("Couldn't write file");
-        }
+        check();
     }
 
 private:
