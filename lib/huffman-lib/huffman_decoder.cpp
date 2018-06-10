@@ -3,7 +3,6 @@
 //
 
 #include "include/huffman_decoder.h"
-#include <iostream>
 
 void huffman_decoder::init(huffman_tree::encoded_tree const& encoded) {
     tree.decode(encoded);

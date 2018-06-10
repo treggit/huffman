@@ -21,5 +21,6 @@ void put_service(buffered_writer& writer, huffman_encoder& encoder);
 
 void decode(std::string const& filename, std::string const& filename_decoded);
 huffman_tree::encoded_tree extract_service(buffered_reader& reader);
+size_t calc_tree_size(size_t leaves_size);
 
 #endif //HUFFMAN_COMPRESS_UTILLS_H

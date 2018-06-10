@@ -78,12 +78,16 @@ huffman_tree::encoded_tree extract_service(buffered_reader& reader) {
     tree.size = static_cast<size_t>(reader.get_char());
     tree.size <<= BIT_CAP;
     tree.size |= static_cast<size_t>(reader.get_char());
-    size_t edges_size = 2 * tree.size / BIT_CAP;
-    edges_size += ((2 * tree.size) % BIT_CAP != 0);
-    tree.edges.resize(edges_size);
+    tree.edges.resize(calc_tree_size(tree.size));
     tree.leaves_ordered.resize(tree.size);
     reader.read(tree.edges.data(), tree.edges.size());
     reader.read(tree.leaves_ordered.data(), tree.leaves_ordered.size());
     reader.get(tree.bytes_encoded);
     return tree;
+}
+
+size_t calc_tree_size(size_t leaves_size) {
+    size_t edges_size = 2 * leaves_size / BIT_CAP;
+    edges_size += ((2 * leaves_size) % BIT_CAP != 0);
+    return edges_size;
 }
