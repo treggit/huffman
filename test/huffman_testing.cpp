@@ -32,6 +32,7 @@ string encode_decode(string const& text) {
 
     char unpacked = 0;
     size_t unpacked_bits = BIT_CAP;
+
     vector<huffman_code> encoded_seq = encoder.encode(text.data(), text.size());
     vector<char> packed = pack(unpacked, unpacked_bits, encoded_seq);
 

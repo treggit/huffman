@@ -57,7 +57,10 @@ size_t huffman_decoder::jump(char path, size_t steps) {
         return 0;
     }
     size_t before_jump = get_depth();
-    automata_ptr = automata_ptr->jump[path][steps];
+    huffman_tree::node_ptr next_node = automata_ptr->jump[path][steps];
+    if (next_node != nullptr) {
+        automata_ptr = next_node;
+    }
     return get_depth() - before_jump;
 }
 

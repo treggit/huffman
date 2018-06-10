@@ -36,13 +36,17 @@ struct huffman_tree {
         }
 
         node_ptr calc_jump(node_ptr& child, size_t prefix, size_t size) {
-            return child->jump[prefix][size - 1];
+            node_ptr next_node = child->jump[prefix][size - 1];
+            if (next_node == nullptr) {
+                next_node = child;
+            }
+            return next_node;
         }
 
         void init_jumps() {
             jump.resize(ALPHABET_SIZE);
             for (auto& x : jump) {
-                x.resize(BIT_CAP + 1, node_ptr(new node(*this)));
+                x.resize(BIT_CAP + 1, nullptr);
             }
         }
 
