@@ -4,7 +4,7 @@
 
 #include "include/huffman_tree.h"
 #include <queue>
-#include <iostream>
+#include <algorithm>
 
 
 huffman_tree::huffman_tree() : root(nullptr) {

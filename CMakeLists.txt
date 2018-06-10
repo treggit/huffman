@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.8)
 project(huffman)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -19,4 +19,4 @@ target_link_libraries(huffman huffman_lib)
 
 add_executable(huffman_testing test/huffman_testing.cpp lib/gtest/gtest-all.cc lib/gtest/gtest.h lib/gtest/gtest_main.cc test/randomizer.cpp test/randomizer.h)
 
-target_link_libraries(huffman_testing huffman_lib -lgmp -lgmpxx -lpthread)
+target_link_libraries(huffman_testing huffman_lib)
