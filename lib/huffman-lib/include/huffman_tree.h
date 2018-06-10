@@ -39,15 +39,15 @@ struct huffman_tree {
             return child->jump[prefix][size - 1];
         }
 
-        void init_jumps(node_ptr init_val) {
+        void init_jumps() {
             jump.resize(ALPHABET_SIZE);
             for (auto& x : jump) {
-                x.resize(BIT_CAP + 1, init_val);
+                x.resize(BIT_CAP + 1, node_ptr(new node(*this)));
             }
         }
 
-        void calc_jumps(node_ptr init_val) {
-            init_jumps(init_val);
+        void calc_jumps() {
+            init_jumps();
             if (is_leaf()) {
                 return;
             }

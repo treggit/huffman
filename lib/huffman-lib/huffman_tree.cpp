@@ -130,10 +130,10 @@ void huffman_tree::build_jumps(huffman_tree::node_ptr& v) {
         return;
     }
     if (v->is_leaf()) {
-        v->calc_jumps(v);
+        v->calc_jumps();
         return;
     }
     build_jumps(v->left);
     build_jumps(v->right);
-    v->calc_jumps(v);
+    v->calc_jumps();
 }
