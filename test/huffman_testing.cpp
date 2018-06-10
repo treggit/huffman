@@ -3,9 +3,9 @@
 //
 
 #include "../lib/gtest/gtest.h"
-#include "../lib/huffman-lib/include/huffman_encoder.h"
-#include "../lib/huffman-lib/include/huffman_decoder.h"
-#include "../lib/huffman-lib/include/packager.h"
+#include "huffman_encoder.h"
+#include "huffman_decoder.h"
+#include "packager.h"
 #include <algorithm>
 
 #include "randomizer.h"

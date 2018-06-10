@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "compress_utills.h"
-#include "../lib/huffman-lib/include/packager.h"
+#include "packager.h"
 
 
 void encode(std::string const& filename, std::string const& filename_encoded) {

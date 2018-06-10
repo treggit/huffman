@@ -12,6 +12,7 @@ include_directories({$CMAKE_SOURCE_DIR}/lib/huffman-lib/include)
 include_directories({$CMAKE_SOURCE_DIR}/lib)
 
 add_subdirectory(lib/huffman-lib)
+include_directories(lib/huffman-lib/include)
 
 add_executable(huffman src/main.cpp src/buffered_reader.cpp src/buffered_reader.h src/buffered_writer.cpp src/buffered_writer.h src/compress_utills.cpp src/compress_utills.h)
 

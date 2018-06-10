@@ -8,9 +8,9 @@
 #include "buffered_reader.h"
 #include "buffered_writer.h"
 
-#include "../lib/huffman-lib/include/huffman_encoder.h"
-#include "../lib/huffman-lib/include/huffman_decoder.h"
-#include "../lib/huffman-lib/include/huffman_code.h"
+#include "huffman_encoder.h"
+#include "huffman_decoder.h"
+#include "huffman_code.h"
 
 const size_t BUFFER_SIZE = 4096 * 100;
 
