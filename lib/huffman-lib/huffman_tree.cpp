@@ -74,6 +74,14 @@ void huffman_tree::set_codes(node_ptr& v, huffman_code cur_code) {
     set_codes(v->right, {cur_code.value * 2 + 1, cur_code.length + 1});
 }
 
+void encode_bit_ptr_handler(size_t& bit_ptr, huffman_tree::encoded_tree& encoded) {
+    if (bit_ptr == 0) {
+        bit_ptr = BIT_CAP;
+        encoded.edges.push_back(0);
+    }
+    bit_ptr--;
+}
+
 void huffman_tree::encoding_tour(node_ptr& v, encoded_tree& encoded, size_t& bit_ptr) {
     if (v == nullptr) {
         return;
@@ -82,20 +90,21 @@ void huffman_tree::encoding_tour(node_ptr& v, encoded_tree& encoded, size_t& bit
         encoded.leaves_ordered.push_back(v->value);
         return;
     }
-    if (bit_ptr == 0) {
-        bit_ptr = BIT_CAP;
-        encoded.edges.push_back(0);
-    }
-    bit_ptr--;
+    encode_bit_ptr_handler(bit_ptr, encoded);
     encoding_tour(v->left, encoded, bit_ptr);
     encoded.edges.back() |= (1 << bit_ptr);
-    if (bit_ptr == 0) {
-        bit_ptr = BIT_CAP;
-        encoded.edges.push_back(0);
-    }
-    bit_ptr--;
+    encode_bit_ptr_handler(bit_ptr, encoded);
     encoding_tour(v->right, encoded, bit_ptr);
 }
+
+void decode_bit_ptr_handler(size_t& bit_ptr, huffman_tree::encoded_tree& encoded) {
+    if (bit_ptr == 0) {
+        bit_ptr = BIT_CAP;
+        encoded.edges.pop_back();
+    }
+    bit_ptr--;
+}
+
 
 huffman_tree::node_ptr huffman_tree::decoding_tour(encoded_tree& encoded, size_t& bit_ptr, size_t depth) {
     if (encoded.leaves_ordered.empty()) {
@@ -104,17 +113,9 @@ huffman_tree::node_ptr huffman_tree::decoding_tour(encoded_tree& encoded, size_t
     node_ptr cur_node(new node(0, depth));
 
     if ((encoded.edges.back() & (1 << bit_ptr)) == 0) {
-        if (bit_ptr == 0) {
-            bit_ptr = BIT_CAP;
-            encoded.edges.pop_back();
-        }
-        bit_ptr--;
+        decode_bit_ptr_handler(bit_ptr, encoded);
         cur_node->left = decoding_tour(encoded, bit_ptr, depth + 1);
-        if (bit_ptr == 0) {
-            bit_ptr = BIT_CAP;
-            encoded.edges.pop_back();
-        }
-        bit_ptr--;
+        decode_bit_ptr_handler(bit_ptr, encoded);
         cur_node->right = decoding_tour(encoded, bit_ptr, depth + 1);
     }
     else {
